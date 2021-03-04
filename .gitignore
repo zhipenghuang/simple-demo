@@ -1,0 +1,5 @@
+# Binaries for programs and plugins
+logs
+.idea
+target
+*.iml
