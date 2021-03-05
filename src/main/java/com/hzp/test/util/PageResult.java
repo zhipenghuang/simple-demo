@@ -20,7 +20,7 @@ public class PageResult<T> {
     private int pageSize;
 
     @ApiModelProperty("总条数")
-    private int dataCount;
+    private int total;
 
     @ApiModelProperty("数据")
     private List<T> data;

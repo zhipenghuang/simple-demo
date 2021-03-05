@@ -31,30 +31,30 @@ public class ReqLogAspect {
     private static final String USER_AGENT = "user-agent";
 
     //请求地址
-    private String requestPath = null;
+    private String requestPath;
     //请求头
-    private String requestHeader = null;
+    private String requestHeader;
     //传入参数
-    private String inputParamString;
+    private String requestParam;
     //存放输出结果
-    private Map<String, Object> outputParamMap = null;
+    private Object responseObj;
     //开始时间
-    private long startTimeMillis = 0;
+    private long startTimestamp;
     //结束时间
-    private long endTimeMillis = 0;
+    private long endTimestamp;
 
     //方法调用前触发 记录开始时间
     @Before("execution(* com.hzp.test.controller..*.*(..))")
     public void doBeforeInServiceLayer(JoinPoint joinPoint) {
         // 记录方法开始执行的时间
-        startTimeMillis = System.currentTimeMillis();
+        startTimestamp = System.currentTimeMillis();
     }
 
     //方法调用后触发 记录结束时间
     @After("execution(* com.hzp.test.controller..*.*(..))")
     public void doAfterInServiceLayer(JoinPoint joinPoint) {
         // 记录方法执行完成的时间
-        endTimeMillis = System.currentTimeMillis();
+        endTimestamp = System.currentTimeMillis();
         printOptLog();
     }
 
@@ -78,20 +78,18 @@ public class ReqLogAspect {
                 && request.getContentType().contains("application/json")) {
             requestWrapper = (ReqReReadWrapper) request;
             String bodyString = getBodyString(requestWrapper);
-            inputParamString = bodyString;
+            requestParam = bodyString;
         } else {
             // 获取输入参数
-            inputParamString = new Gson().toJson(request.getParameterMap());
+            requestParam = new Gson().toJson(request.getParameterMap());
         }
         //请求头
         requestHeader = headersList.toString();
         // 获取请求地址
         requestPath = request.getRequestURL().toString();
-        // 执行完方法的返回值：调用proceed()方法，就会触发切入点方法执行
-        outputParamMap = new HashMap<>(16);
-        // result的值就是被拦截方法的返回值
+        // 执行完方法的返回值：调用proceed()方法，就会触发切入点方法执行,result的值就是被拦截方法的返回值
         Object result = pjp.proceed();
-        outputParamMap.put("result", result);
+        responseObj = result;
         return result;
     }
 
@@ -149,9 +147,9 @@ public class ReqLogAspect {
     private void printOptLog() {
         // 需要用到google的gson解析包
         Gson gson = new Gson();
-        DateTime dateTime = new DateTime(startTimeMillis);
-        log.info("\n请求地址：" + requestPath + "\n请求头：" + requestHeader + "\n请求时间：" +
-                dateTime.toString("yyyy-MM-dd HH:mm:ss.sss") + "\n花费时间：" + (endTimeMillis - startTimeMillis)
-                + "ms" + "\n请求参数：" + inputParamString + "\n请求结果：" + gson.toJson(outputParamMap));
+        DateTime dateTime = new DateTime(startTimestamp);
+        log.info("\n请求地址：" + requestPath + "\n请求头　：" + requestHeader + "\n请求时间：" +
+                dateTime.toString("yyyy-MM-dd HH:mm:ss.sss") + "\n花费时间：" + (endTimestamp - startTimestamp)
+                + "ms" + "\n请求参数：" + requestParam + "\n请求结果：" + gson.toJson(responseObj));
     }
 }

@@ -17,42 +17,34 @@ public class ResponseEntity<T> {
 
     @ApiModelProperty("code,0成功,其他失败")
     @JSONField(ordinal = 1)
-    private int ecode = 0;
+    private int code = 0;
 
     @ApiModelProperty("请求结果信息提示")
     @JSONField(ordinal = 2)
-    private String message;
-
-    @ApiModelProperty("时间戳")
-    @JSONField(ordinal = 3)
-    private long ts;
+    private String msg;
 
     @ApiModelProperty("具体数据")
     @JSONField(ordinal = 4)
     private T data;
 
     public ResponseEntity() {
-        this.ecode = SystemErrors.SUCCESS.code;
-        this.message = SystemErrors.SUCCESS.message;
-        this.ts = System.currentTimeMillis();
+        this.code = SystemErrors.SUCCESS.code;
+        this.msg = SystemErrors.SUCCESS.message;
     }
 
     public ResponseEntity(Errors errors) {
-        this.ecode = errors.getCode();
-        this.message = errors.getMessage();
-        this.ts = System.currentTimeMillis();
+        this.code = errors.getCode();
+        this.msg = errors.getMessage();
     }
 
-    public ResponseEntity(int ecode, String message) {
-        this.ecode = ecode;
-        this.message = message;
-        this.ts = System.currentTimeMillis();
+    public ResponseEntity(int code, String msg) {
+        this.code = code;
+        this.msg = msg;
     }
 
     public ResponseEntity(T t) {
-        this.ecode = SystemErrors.SUCCESS.code;
-        this.message = SystemErrors.SUCCESS.message;
+        this.code = SystemErrors.SUCCESS.code;
+        this.msg = SystemErrors.SUCCESS.message;
         this.data = t;
-        this.ts = System.currentTimeMillis();
     }
 }

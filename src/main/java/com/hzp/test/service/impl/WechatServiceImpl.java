@@ -116,12 +116,12 @@ public class WechatServiceImpl implements WechatService {
         if (StringUtils.isNotBlank(req.getWechats())) {
             criteria.andWechatsLike("%" + req.getWechats() + "%");
         }
-        PageHelper.startPage(req.getNumber(), req.getSize(), "create_time desc");
+        PageHelper.startPage(req.getPageIndex(), req.getPageSize(), "create_time desc");
         PageInfo<WechatGroup> info = new PageInfo<>(wechatGroupMapper.selectByExample(example));
         PageResult<WechatGroup> pages = new PageResult();
-        pages.setPageIndex(req.getNumber());
-        pages.setPageSize(req.getSize());
-        pages.setDataCount((int) info.getTotal());
+        pages.setPageIndex(req.getPageIndex());
+        pages.setPageSize(req.getPageSize());
+        pages.setTotal((int) info.getTotal());
         pages.setData(info.getList());
         return pages;
     }

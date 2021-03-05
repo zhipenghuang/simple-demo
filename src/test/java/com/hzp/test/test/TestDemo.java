@@ -31,8 +31,8 @@ public class TestDemo {
     public void tes() {
         PageWechatReq pageWechatReq = new PageWechatReq();
         pageWechatReq.setGroup("y");
-        pageWechatReq.setNumber(1);
-        pageWechatReq.setSize(2);
+        pageWechatReq.setPageIndex(1);
+        pageWechatReq.setPageSize(2);
         wechatService.page(pageWechatReq);
     }
 
