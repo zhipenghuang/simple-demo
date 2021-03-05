@@ -17,7 +17,7 @@ public class ResponseEntity<T> {
 
     @ApiModelProperty("code,0成功,其他失败")
     @JSONField(ordinal = 1)
-    private int code = 0;
+    private int code;
 
     @ApiModelProperty("请求结果信息提示")
     @JSONField(ordinal = 2)
