@@ -28,6 +28,8 @@ import java.util.*;
 @Component
 public class ReqLogAspect {
 
+    private static final String USER_AGENT = "user-agent";
+
     //请求地址
     private String requestPath = null;
     //请求头
@@ -67,7 +69,9 @@ public class ReqLogAspect {
         List<String> headersList = new ArrayList<>();
         while (headers.hasMoreElements()) {
             String header = headers.nextElement();
-            headersList.add(header + "=" + request.getHeader(header));
+            if (USER_AGENT.equalsIgnoreCase(header)) {
+                headersList.add(header + "=" + request.getHeader(header));
+            }
         }
         ReqReReadWrapper requestWrapper;
         if (request instanceof ReqReReadWrapper && request.getMethod().equalsIgnoreCase("post")
