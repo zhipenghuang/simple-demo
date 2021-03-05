@@ -24,7 +24,7 @@ public class ResponseEntity<T> {
     private String msg;
 
     @ApiModelProperty("具体数据")
-    @JSONField(ordinal = 4)
+    @JSONField(ordinal = 3)
     private T data;
 
     public ResponseEntity() {
