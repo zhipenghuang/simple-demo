@@ -65,6 +65,9 @@ public class ReqLogAspect {
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;
         HttpServletRequest request = sra.getRequest();
+        //获取请求地址
+        requestPath = request.getRequestURL().toString();
+        //获取请求头
         Enumeration<String> headers = request.getHeaderNames();
         List<String> headersList = new ArrayList<>();
         while (headers.hasMoreElements()) {
@@ -73,20 +76,16 @@ public class ReqLogAspect {
                 headersList.add(header + "=" + request.getHeader(header));
             }
         }
-        ReqReReadWrapper requestWrapper;
-        if (request instanceof ReqReReadWrapper && request.getMethod().equalsIgnoreCase("post")
-                && request.getContentType().contains("application/json")) {
-            requestWrapper = (ReqReReadWrapper) request;
-            String bodyString = getBodyString(requestWrapper);
-            requestParam = bodyString;
+        requestHeader = headersList.toString();
+        //获取请求参数
+        if (request instanceof ReqReReadWrapper) {
+            //post从body获取
+            ReqReReadWrapper requestWrapper = (ReqReReadWrapper) request;
+            requestParam = getBodyString(requestWrapper);
         } else {
-            // 获取输入参数
+            //get直接获取
             requestParam = new Gson().toJson(request.getParameterMap());
         }
-        //请求头
-        requestHeader = headersList.toString();
-        // 获取请求地址
-        requestPath = request.getRequestURL().toString();
         // 执行完方法的返回值：调用proceed()方法，就会触发切入点方法执行,result的值就是被拦截方法的返回值
         Object result = pjp.proceed();
         responseObj = result;
