@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @ApiModel
-public class PageResult<T> {
+public class PageResponse<T> {
 
     @ApiModelProperty("页码")
     private int pageIndex;

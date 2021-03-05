@@ -17,7 +17,7 @@ import com.hzp.test.entity.WechatGroupExample;
 import com.hzp.test.exception.SysException;
 import com.hzp.test.exception.SystemErrors;
 import com.hzp.test.mapper.WechatGroupMapper;
-import com.hzp.test.util.PageResult;
+import com.hzp.test.util.PageResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,7 +107,7 @@ public class WechatServiceImpl implements WechatService {
     }
 
     @Override
-    public PageResult<WechatGroup> page(PageWechatReq req) {
+    public PageResponse<WechatGroup> page(PageWechatReq req) {
         WechatGroupExample example = new WechatGroupExample();
         WechatGroupExample.Criteria criteria = example.createCriteria();
         if (StringUtils.isNotBlank(req.getGroup())) {
@@ -118,7 +118,7 @@ public class WechatServiceImpl implements WechatService {
         }
         PageHelper.startPage(req.getPageIndex(), req.getPageSize(), "create_time desc");
         PageInfo<WechatGroup> info = new PageInfo<>(wechatGroupMapper.selectByExample(example));
-        PageResult<WechatGroup> pages = new PageResult();
+        PageResponse<WechatGroup> pages = new PageResponse();
         pages.setPageIndex(req.getPageIndex());
         pages.setPageSize(req.getPageSize());
         pages.setTotal((int) info.getTotal());

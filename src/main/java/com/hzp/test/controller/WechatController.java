@@ -6,7 +6,7 @@ import com.hzp.test.dto.UpdateWechatReq;
 import com.hzp.test.dto.WechatIdReq;
 import com.hzp.test.entity.WechatGroup;
 import com.hzp.test.service.WechatService;
-import com.hzp.test.util.PageResult;
+import com.hzp.test.util.PageResponse;
 import com.hzp.test.util.ResponseEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -56,7 +56,7 @@ public class WechatController {
     @ResponseBody
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     @ApiOperation(value = "分页查询")
-    public ResponseEntity<PageResult<WechatGroup>> page(@RequestBody PageWechatReq pageWechatReq) {
+    public ResponseEntity<PageResponse<WechatGroup>> page(@RequestBody PageWechatReq pageWechatReq) {
         return new ResponseEntity(wechatService.page(pageWechatReq));
     }
 
