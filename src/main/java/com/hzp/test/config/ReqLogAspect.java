@@ -61,7 +61,6 @@ public class ReqLogAspect {
     //环绕触发
     @Around("execution(* com.hzp.test.controller..*.*(..))")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
-
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;
         HttpServletRequest request = sra.getRequest();
@@ -93,7 +92,7 @@ public class ReqLogAspect {
     }
 
     //获取请求Body流
-    public static String getBodyString(final ServletRequest request) {
+    private String getBodyString(final ServletRequest request) {
         StringBuilder sb = new StringBuilder();
         InputStream inputStream = null;
         BufferedReader reader = null;
@@ -126,7 +125,7 @@ public class ReqLogAspect {
     }
 
     //复制输入流
-    public static InputStream cloneInputStream(ServletInputStream inputStream) {
+    private InputStream cloneInputStream(ServletInputStream inputStream) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
         int len;
