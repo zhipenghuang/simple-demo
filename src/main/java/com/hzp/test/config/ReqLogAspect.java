@@ -146,8 +146,11 @@ public class ReqLogAspect {
         // 需要用到google的gson解析包
         Gson gson = new Gson();
         DateTime dateTime = new DateTime(startTimestamp);
-        log.info("\n请求地址：" + requestPath + "\n请求头　：" + requestHeader + "\n请求时间：" +
-                dateTime.toString("yyyy-MM-dd HH:mm:ss.sss") + "\n花费时间：" + (endTimestamp - startTimestamp)
-                + "ms" + "\n请求参数：" + requestParam + "\n请求结果：" + gson.toJson(responseObj));
+        log.info("\n请求地址：" + requestPath +
+                "\n请求头　：" + requestHeader +
+                "\n请求时间：" + dateTime.toString("yyyy-MM-dd HH:mm:ss.sss") +
+                "\n花费时间：" + (endTimestamp - startTimestamp) + "ms" +
+                "\n请求参数：" + requestParam +
+                "\n请求结果：" + gson.toJson(responseObj));
     }
 }
