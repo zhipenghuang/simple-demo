@@ -13,6 +13,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/manage/wechat")
 @Api(tags = "微信管理")
@@ -56,7 +58,9 @@ public class WechatController {
     @ResponseBody
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     @ApiOperation(value = "分页查询")
-    public ResponseEntity<PageResponse<WechatGroup>> page(@RequestBody PageWechatReq pageWechatReq) {
+    public ResponseEntity<PageResponse<WechatGroup>> page(@RequestBody PageWechatReq pageWechatReq, HttpServletRequest request) {
+        System.err.println("userId : "+ request.getAttribute("userId"));
+        System.err.println("username : "+ request.getAttribute("username"));
         return new ResponseEntity(wechatService.page(pageWechatReq));
     }
 

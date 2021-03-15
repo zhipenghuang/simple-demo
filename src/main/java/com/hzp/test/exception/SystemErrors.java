@@ -22,7 +22,8 @@ public enum SystemErrors implements Errors {
     GROUP_EXISTS(1004, "组名已存在"),
     NO_DOMAIN(1005, "域名没有配置"),
     PASSWORD_NOT_EXISTS(1006, "密码未设置"),
-    CN_CHAR_EXISTS(1007, "不能使用中文逗号");
+    CN_CHAR_EXISTS(1007, "不能使用中文逗号"),
+    TOKEN_ERROR(1522, "token不合法");
 
 
     public int code;

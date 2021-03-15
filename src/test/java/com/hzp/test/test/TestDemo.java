@@ -6,6 +6,8 @@ import com.hzp.test.SimpleDemoApplication;
 import com.hzp.test.dto.PageWechatReq;
 import com.hzp.test.mapper.WechatGroupMapper;
 import com.hzp.test.service.WechatService;
+import com.hzp.test.util.JwtInfo;
+import com.hzp.test.util.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +27,8 @@ public class TestDemo {
     private WechatService wechatService;
     @Autowired
     private WechatGroupMapper wechatGroupMapper;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
 
     @Test
@@ -65,5 +69,21 @@ public class TestDemo {
 //            log.info(wechat);
 //        }
         executor.shutdown();
+    }
+
+    @Test
+    public void test11() {
+        JwtInfo jwtInfo = new JwtInfo();
+        jwtInfo.setUserId(1111L);
+        jwtInfo.setUsername("yunmu");
+        String token = jwtTokenUtil.generateToken(jwtInfo);
+        System.err.println(token);
+
+        try {
+            JwtInfo info = jwtTokenUtil.validateToken(token);
+            System.err.println(info);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

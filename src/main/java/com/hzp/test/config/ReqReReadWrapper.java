@@ -31,6 +31,9 @@ public class ReqReReadWrapper extends HttpServletRequestWrapper {
 
     @Override
     public ServletInputStream getInputStream() {
+        if (body == null) {
+            return null;
+        }
         final ByteArrayInputStream bais = new ByteArrayInputStream(body);
         return new ServletInputStream() {
             @Override

@@ -35,4 +35,9 @@ pagehelper:
   reasonable: true
   support-methods-arguments: true
 
+jwt:
+  token-header: Authorization
+  expire: -1
+  secret: xx1WET12^%3^(WE45
+
 

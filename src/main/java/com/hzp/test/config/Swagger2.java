@@ -21,18 +21,18 @@ public class Swagger2 {
     @Bean
     public Docket createRestApi() {
         //添加head参数start
-//        ParameterBuilder tokenPar = new ParameterBuilder();
-//        List<Parameter> pars = new ArrayList<>();
-//        tokenPar.name("tk").description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
-//        pars.add(tokenPar.build());
+        ParameterBuilder tokenPar = new ParameterBuilder();
+        List<Parameter> pars = new ArrayList<>();
+        tokenPar.name("Authorization").description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+        pars.add(tokenPar.build());
         //添加head参数end
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.hzp.test.controller"))
                 .paths(PathSelectors.any())
-                .build();
-//                .globalOperationParameters(pars);
+                .build()
+                .globalOperationParameters(pars);
     }
 
     private ApiInfo apiInfo() {

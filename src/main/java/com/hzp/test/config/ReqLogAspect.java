@@ -97,7 +97,11 @@ public class ReqLogAspect {
         InputStream inputStream = null;
         BufferedReader reader = null;
         try {
-            inputStream = cloneInputStream(request.getInputStream());
+            ServletInputStream originInputStream = request.getInputStream();
+            if (originInputStream == null) {
+                return sb.toString();
+            }
+            inputStream = cloneInputStream(originInputStream);
             reader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
             String line = "";
             while ((line = reader.readLine()) != null) {

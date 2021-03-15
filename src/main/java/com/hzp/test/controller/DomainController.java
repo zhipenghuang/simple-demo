@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/manage/domain")
 @Api(tags = "域名")
@@ -21,7 +23,9 @@ public class DomainController {
     @ResponseBody
     @RequestMapping(value = "findOne", method = RequestMethod.POST)
     @ApiOperation(value = "获取域名")
-    public ResponseEntity<String> findOne() {
+    public ResponseEntity<String> findOne(HttpServletRequest request) {
+        System.err.println("userId : "+ request.getAttribute("userId"));
+        System.err.println("username : "+ request.getAttribute("username"));
         return new ResponseEntity(domainService.findOne());
     }
 
