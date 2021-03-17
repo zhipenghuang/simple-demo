@@ -1,10 +1,13 @@
 package com.hzp.test.test;
 
+import cn.hutool.core.util.RandomUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.hzp.test.SimpleDemoApplication;
 import com.hzp.test.dto.PageWechatReq;
 import com.hzp.test.mapper.WechatGroupMapper;
+import com.hzp.test.service.TestService;
 import com.hzp.test.service.WechatService;
 import com.hzp.test.util.JwtInfo;
 import com.hzp.test.util.JwtTokenUtil;
@@ -16,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.*;
 
 @Slf4j
@@ -29,6 +33,8 @@ public class TestDemo {
     private WechatGroupMapper wechatGroupMapper;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private TestService testService;
 
 
     @Test
@@ -85,5 +91,19 @@ public class TestDemo {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void te() {
+        String seckey = "123456" + UUID.randomUUID();
+
+        String md5Str = SecureUtil.md5(seckey);
+        System.out.println(md5Str);
+    }
+
+    @Test
+    public void te1() {
+        Integer type = testService.getType();
+        System.err.println(type);
     }
 }
