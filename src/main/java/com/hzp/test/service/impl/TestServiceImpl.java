@@ -18,4 +18,14 @@ public class TestServiceImpl implements TestService {
         Test test = testMapper.selectByPrimaryKey(1L);
         return test.getNum();
     }
+
+    @Override
+    public Long insert() {
+        Test test =new Test();
+        test.setNum(52);
+        int insert = testMapper.insert(test);
+        System.err.println(insert);
+        System.err.println(test.getId());
+        return test.getId();
+    }
 }
