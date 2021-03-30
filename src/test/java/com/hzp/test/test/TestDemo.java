@@ -1,15 +1,9 @@
 package com.hzp.test.test;
 
+import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Validator;
-import cn.hutool.core.net.Ipv4Util;
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.Mode;
-import cn.hutool.crypto.SecureUtil;
-import cn.hutool.crypto.digest.DigestUtil;
-import cn.hutool.crypto.symmetric.AES;
 import cn.hutool.json.JSONUtil;
 import com.google.common.base.Stopwatch;
 import com.google.common.cache.Cache;
@@ -21,17 +15,17 @@ import com.hzp.test.dto.PageWechatReq;
 import com.hzp.test.mapper.WechatGroupMapper;
 import com.hzp.test.service.TestService;
 import com.hzp.test.service.WechatService;
-import com.hzp.test.util.*;
+import com.hzp.test.util.HttpUtils;
+import com.hzp.test.util.JwtInfo;
+import com.hzp.test.util.JwtTokenUtil;
+import com.hzp.test.util.ShareCodeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.*;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import sun.net.util.IPAddressUtil;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -209,8 +203,9 @@ public class TestDemo {
     public void jsonUtil() {
         LoginReq loginReq = new LoginReq();
         loginReq.setPassword("123456");
-        String s = JSONUtil.parse(loginReq).toJSONString(4);
+        String s = JSONUtil.parse(loginReq).toJSONString(0);
         System.err.println(s);
+        System.err.println(JSONUtil.toBean(s, LoginReq.class));
     }
 
     @Test
@@ -226,12 +221,30 @@ public class TestDemo {
         }
     }
 
+    //时间5分钟偏移量,2021-03-30 10:00:00代表2021-03-30 09:55:00到2021-03-30 09:59:59
     @Test
     public void strUtil() {
 //        Long insert = testService.insert();
 
-        String template = "{}爱{}，就像老鼠爱大米";
-        String str = StrUtil.format(template, "我", "你"); //str -> 我爱你，就像老鼠爱大米
-        System.err.println(str);
+        DateTime now = DateUtil.parse("2021-03-30 09:59:59");
+        int minute = now.getField(DateField.MINUTE);
+        DateTime hourOfNow = DateUtil.beginOfHour(now);
+        DateTime fiveMinuteKey = hourOfNow.offsetNew(DateField.MINUTE, minute - minute % 5 + 5);
+        System.err.println(fiveMinuteKey);
+        redisTemplate.opsForValue().set(fiveMinuteKey, "sb");
+
+//        String template = "{}爱{}，就像老鼠爱大米";
+//        String str = StrUtil.format(template, "我", "你"); //str -> 我爱你，就像老鼠爱大米
+//        System.err.println(str);
+    }
+
+    @Test
+    public void clearCache() {
+        Set keys = redisTemplate.keys("*");
+        Iterator iterator = keys.iterator();
+        while (iterator.hasNext()) {
+            redisTemplate.delete(iterator.next());
+        }
+
     }
 }

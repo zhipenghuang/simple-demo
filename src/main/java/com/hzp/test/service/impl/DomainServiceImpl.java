@@ -8,6 +8,7 @@ import com.hzp.test.exception.SystemErrors;
 import com.hzp.test.mapper.DomainMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +18,7 @@ public class DomainServiceImpl implements DomainService {
     private DomainMapper domainMapper;
 
     @Override
+    @Cacheable(value="domain",key="'sssssss'")
     public String findOne() {
         Domain domain = domainMapper.selectOneByExample(new DomainExample());
         if (domain == null || StringUtils.isBlank(domain.getDomain())) {

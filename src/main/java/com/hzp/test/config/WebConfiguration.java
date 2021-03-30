@@ -19,7 +19,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authIntercepter).addPathPatterns("/manage/**").excludePathPatterns(whitelistUri());
+//        registry.addInterceptor(authIntercepter).addPathPatterns("/manage/**").excludePathPatterns(whitelistUri());
     }
 
     /**
