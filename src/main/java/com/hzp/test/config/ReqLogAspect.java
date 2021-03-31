@@ -1,14 +1,13 @@
 package com.hzp.test.config;
 
-import com.google.gson.Gson;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.joda.time.DateTime;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
@@ -20,7 +19,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 @Aspect
 @Slf4j
@@ -30,37 +31,24 @@ public class ReqLogAspect {
 
     private static final String USER_AGENT = "user-agent";
 
-    //请求地址
-    private String requestPath;
-    //请求头
-    private String requestHeader;
-    //传入参数
-    private String requestParam;
-    //存放输出结果
-    private Object responseObj;
-    //开始时间
-    private long startTimestamp;
-    //结束时间
-    private long endTimestamp;
-
-    //方法调用前触发 记录开始时间
-    @Before("execution(* com.hzp.test.controller..*.*(..))")
-    public void doBeforeInServiceLayer(JoinPoint joinPoint) {
-        // 记录方法开始执行的时间
-        startTimestamp = System.currentTimeMillis();
-    }
-
-    //方法调用后触发 记录结束时间
-    @After("execution(* com.hzp.test.controller..*.*(..))")
-    public void doAfterInServiceLayer(JoinPoint joinPoint) {
-        // 记录方法执行完成的时间
-        endTimestamp = System.currentTimeMillis();
-        printOptLog();
-    }
+    @Pointcut("@within(org.springframework.web.bind.annotation.RestController) @within(org.springframework.stereotype.Controller)")
+    public void logPointCut() {}
 
     //环绕触发
-    @Around("execution(* com.hzp.test.controller..*.*(..))")
+    @Around("logPointCut()")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
+        //请求地址
+        String requestPath;
+        //请求头
+        String requestHeader;
+        //传入参数
+        String requestParam;
+        //存放输出结果
+        Object responseObj;
+        //开始时间
+        long startTimestamp = System.currentTimeMillis();
+        //结束时间
+        long endTimestamp;
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;
         HttpServletRequest request = sra.getRequest();
@@ -83,11 +71,13 @@ public class ReqLogAspect {
             requestParam = getBodyString(requestWrapper);
         } else {
             //get直接获取
-            requestParam = new Gson().toJson(request.getParameterMap());
+            requestParam = JSONUtil.parse(request.getParameterMap() == null ? JSONUtil.createObj() : request.getParameterMap()).toJSONString(0);
         }
         // 执行完方法的返回值：调用proceed()方法，就会触发切入点方法执行,result的值就是被拦截方法的返回值
         Object result = pjp.proceed();
         responseObj = result;
+        endTimestamp = System.currentTimeMillis();
+        printOptLog(requestPath, requestHeader, requestParam, responseObj, startTimestamp, endTimestamp);
         return result;
     }
 
@@ -146,15 +136,13 @@ public class ReqLogAspect {
     }
 
     //输出日志
-    private void printOptLog() {
-        // 需要用到google的gson解析包
-        Gson gson = new Gson();
-        DateTime dateTime = new DateTime(startTimestamp);
+    private void printOptLog(String requestPath, String requestHeader, String requestParam, Object responseObj, long start, long end) {
+        DateTime date = DateUtil.date(start);
         log.info("\n请求地址：" + requestPath +
                 "\n请求头　：" + requestHeader +
-                "\n请求时间：" + dateTime.toString("yyyy-MM-dd HH:mm:ss.sss") +
-                "\n花费时间：" + (endTimestamp - startTimestamp) + "ms" +
+                "\n请求时间：" + date.toString("yyyy-MM-dd HH:mm:ss.sss") +
+                "\n花费时间：" + (end - start) + "ms" +
                 "\n请求参数：" + requestParam +
-                "\n请求结果：" + gson.toJson(responseObj));
+                "\n请求结果：" + JSONUtil.parse(responseObj == null ? JSONUtil.createObj() : responseObj).toJSONString(0));
     }
 }

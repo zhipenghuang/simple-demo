@@ -41,7 +41,7 @@ spring:
     cluster:
       max-redirects: 3
       nodes: 192.168.150.128:6380,192.168.150.128:6381,192.168.150.128:6382,192.168.150.128:6383,192.168.150.128:6384,192.168.150.128:6385
-      timeout: 1000
+      timeout: 8000
     main:
       allow-bean-definition-overriding: true
 mybatis:

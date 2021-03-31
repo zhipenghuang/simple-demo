@@ -4,7 +4,6 @@ import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Validator;
-import cn.hutool.json.JSONUtil;
 import com.google.common.base.Stopwatch;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -15,11 +14,9 @@ import com.hzp.test.dto.PageWechatReq;
 import com.hzp.test.mapper.WechatGroupMapper;
 import com.hzp.test.service.TestService;
 import com.hzp.test.service.WechatService;
-import com.hzp.test.util.HttpUtils;
-import com.hzp.test.util.JwtInfo;
-import com.hzp.test.util.JwtTokenUtil;
-import com.hzp.test.util.ShareCodeUtil;
+import com.hzp.test.util.*;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -203,9 +200,16 @@ public class TestDemo {
     public void jsonUtil() {
         LoginReq loginReq = new LoginReq();
         loginReq.setPassword("123456");
-        String s = JSONUtil.parse(loginReq).toJSONString(0);
-        System.err.println(s);
-        System.err.println(JSONUtil.toBean(s, LoginReq.class));
+//        String s = JSONUtil.parse(loginReq).toJSONString(0);
+//        System.err.println(s);
+//        System.err.println(JSONUtil.toBean(s, LoginReq.class));
+
+//        Object ceshi = redisTemplate.opsForValue().get("ceshi");
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        System.err.println(objectMapper.convertValue(ceshi, LoginReq.class));
+        Map<String, LoginReq> map = new HashMap<>();
+        map.put("ssss",loginReq);
+        redisTemplate.opsForValue().set("ceshi", map);
     }
 
     @Test
@@ -243,7 +247,8 @@ public class TestDemo {
         Set keys = redisTemplate.keys("*");
         Iterator iterator = keys.iterator();
         while (iterator.hasNext()) {
-            redisTemplate.delete(iterator.next());
+//            redisTemplate.delete(iterator.next());
+            System.err.println(iterator.next());
         }
 
     }
