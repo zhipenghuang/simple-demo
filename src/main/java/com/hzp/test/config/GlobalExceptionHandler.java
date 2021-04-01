@@ -1,5 +1,6 @@
 package com.hzp.test.config;
 
+import cn.hutool.core.util.StrUtil;
 import com.hzp.test.exception.*;
 import com.hzp.test.util.ResponseEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +44,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SysException.class)
     @ResponseBody
     public ResponseEntity SysException(SysException e, HttpServletRequest request) {
-        log.error("自定义系统异常", e);
+        log.error(handleLog(request) + "自定义系统异常", e);
         return new ResponseEntity(e.getError().getCode(), e.getError().getMessage());
     }
 
@@ -67,7 +68,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BaseException.class)
     @ResponseBody
     public ResponseEntity BaseException(HttpServletRequest request, BaseException e) {
-        log.error("(⊙o⊙)…呃豁，报错了", e);
+        log.error(handleLog(request), e);
         return new ResponseEntity(e.getError().getCode(), e.getError().getMessage());
     }
 
@@ -75,7 +76,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseEntity handleGlobal(HttpServletRequest request, Exception e) {
-        log.error("(⊙o⊙)…呃豁，报错了", e);
+        log.error(handleLog(request), e);
         return new ResponseEntity(SystemErrors.SYSTEM_ERROR);
     }
 
@@ -111,4 +112,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity(SystemErrors.REQUEST_PARAM_ERROR.code, errMsg);
     }
 
+    private String handleLog(final HttpServletRequest request) {
+        //获取请求地址
+        String requestPath = request.getRequestURL().toString();
+        //获取请求头
+        String requestHeader = ReqLogHandler.getHeaderFromRequest(request);
+        //获取请求参数
+        String requestParam = ReqLogHandler.getParamFromRequest(request);
+        String str = "\n请求地址：" + requestPath +
+                "\n请求头　：" + requestHeader +
+                "\n请求参数：" + StrUtil.cleanBlank(requestParam);
+        return str;
+    }
 }
