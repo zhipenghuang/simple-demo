@@ -1,5 +1,6 @@
 package com.hzp.test.config;
 
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.json.JSONUtil;
 import com.hzp.test.config.ReqReReadWrapper;
 
@@ -8,6 +9,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -18,56 +20,30 @@ public class ReqLogHandler {
 
     //获取post请求的Body数据
     public static String getBodyString(final ServletRequest request) {
-        StringBuilder sb = new StringBuilder();
         InputStream inputStream = null;
         BufferedReader reader = null;
         try {
             ServletInputStream originInputStream = request.getInputStream();
             if (originInputStream == null) {
-                return sb.toString();
+                return "";
             }
             inputStream = cloneInputStream(originInputStream);
-            reader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
-            String line = "";
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-            }
+            reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+            return IoUtil.read(reader);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            IoUtil.close(inputStream);
+            IoUtil.close(reader);
         }
-        return sb.toString();
+        return "";
     }
 
     //复制输入流
     public static InputStream cloneInputStream(ServletInputStream inputStream) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int len;
-        try {
-            while ((len = inputStream.read(buffer)) > -1) {
-                byteArrayOutputStream.write(buffer, 0, len);
-            }
-            byteArrayOutputStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        InputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
-        return byteArrayInputStream;
+        IoUtil.copy(inputStream, byteArrayOutputStream, 1024);
+        return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
     }
 
     //从request中获取header
