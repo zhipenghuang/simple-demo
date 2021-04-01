@@ -2,6 +2,7 @@ package com.hzp.test.config;
 
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -142,7 +143,7 @@ public class ReqLogAspect {
                 "\n请求头　：" + requestHeader +
                 "\n请求时间：" + date.toString("yyyy-MM-dd HH:mm:ss.sss") +
                 "\n花费时间：" + (end - start) + "ms" +
-                "\n请求参数：" + requestParam +
+                "\n请求参数：" + StrUtil.cleanBlank(requestParam) +
                 "\n请求结果：" + JSONUtil.parse(responseObj == null ? JSONUtil.createObj() : responseObj).toJSONString(0));
     }
 }
