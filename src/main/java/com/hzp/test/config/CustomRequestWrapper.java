@@ -1,7 +1,6 @@
 package com.hzp.test.config;
 
 import cn.hutool.core.io.IoUtil;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
@@ -32,7 +31,7 @@ public class CustomRequestWrapper extends HttpServletRequestWrapper {
 
     @Override
     public ServletInputStream getInputStream() {
-        final ByteArrayInputStream bais = new ByteArrayInputStream(body);
+        final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(body);
         return new ServletInputStream() {
             @Override
             public boolean isFinished() {
@@ -45,12 +44,11 @@ public class CustomRequestWrapper extends HttpServletRequestWrapper {
             }
 
             @Override
-            public void setReadListener(ReadListener listener) {
-            }
+            public void setReadListener(ReadListener listener) {}
 
             @Override
             public int read() {
-                return bais.read();
+                return byteArrayInputStream.read();
             }
         };
     }
