@@ -24,8 +24,6 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     /**
      * 白名单
-     *
-     * @return
      */
     private ArrayList<String> whitelistUri() {
         ArrayList<String> list = new ArrayList<>();
