@@ -17,7 +17,7 @@ import com.hzp.test.entity.WechatGroupExample;
 import com.hzp.test.exception.SysException;
 import com.hzp.test.exception.SystemErrors;
 import com.hzp.test.mapper.WechatGroupMapper;
-import com.hzp.test.util.PageResponse;
+import com.hzp.test.dto.common.PageResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

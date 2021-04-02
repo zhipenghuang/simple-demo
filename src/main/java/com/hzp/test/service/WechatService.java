@@ -5,7 +5,7 @@ import com.hzp.test.dto.WechatIdReq;
 import com.hzp.test.dto.SaveWechatReq;
 import com.hzp.test.dto.UpdateWechatReq;
 import com.hzp.test.entity.WechatGroup;
-import com.hzp.test.util.PageResponse;
+import com.hzp.test.dto.common.PageResponse;
 
 public interface WechatService {
     void save(SaveWechatReq saveWechatReq);

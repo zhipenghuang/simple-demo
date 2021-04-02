@@ -1,7 +1,7 @@
 package com.hzp.test.config;
 
 import com.hzp.test.exception.*;
-import com.hzp.test.util.ResponseEntity;
+import com.hzp.test.dto.common.ResponseEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;

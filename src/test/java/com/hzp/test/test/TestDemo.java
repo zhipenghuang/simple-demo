@@ -3,7 +3,6 @@ package com.hzp.test.test;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.base.Stopwatch;
@@ -13,11 +12,13 @@ import com.google.common.util.concurrent.RateLimiter;
 import com.hzp.test.SimpleDemoApplication;
 import com.hzp.test.dto.LoginReq;
 import com.hzp.test.dto.PageWechatReq;
+import com.hzp.test.dto.common.JwtInfo;
 import com.hzp.test.mapper.WechatGroupMapper;
 import com.hzp.test.service.TestService;
 import com.hzp.test.service.WechatService;
 import com.hzp.test.util.*;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +27,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.*;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -49,6 +49,18 @@ public class TestDemo {
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private RedisTemplate redisTemplate;
+
+    private IPUtil ipUtil;
+
+    @Before
+    public void setUp() {
+        ipUtil = new IPUtil();
+    }
+
+    @After
+    public void tearDown() {
+        ipUtil = null;
+    }
 
     @Test
     public void page() {
@@ -211,7 +223,7 @@ public class TestDemo {
 //        ObjectMapper objectMapper = new ObjectMapper();
 //        System.err.println(objectMapper.convertValue(ceshi, LoginReq.class));
         Map<String, LoginReq> map = new HashMap<>();
-        map.put("ssss",loginReq);
+        map.put("ssss", loginReq);
         redisTemplate.opsForValue().set("ceshi", map);
     }
 
@@ -264,5 +276,14 @@ public class TestDemo {
         String sStr = "4";
         int i = StrUtil.indexOfIgnoreCase(retStr, sStr);
         System.err.println(i);
+    }
+
+    @Test
+    public void ipTest() {
+        String ip = "183.178.28.130";
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        System.out.println(ipUtil.getCityInfo(ip));
+        stopwatch.stop();
+        System.err.println(stopwatch.elapsed(TimeUnit.MICROSECONDS));
     }
 }

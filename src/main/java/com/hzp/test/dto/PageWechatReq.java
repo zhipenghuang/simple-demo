@@ -1,6 +1,6 @@
 package com.hzp.test.dto;
 
-import com.hzp.test.util.PageRequest;
+import com.hzp.test.dto.common.PageRequest;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

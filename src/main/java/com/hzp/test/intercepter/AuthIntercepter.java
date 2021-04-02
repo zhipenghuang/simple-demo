@@ -2,16 +2,14 @@ package com.hzp.test.intercepter;
 
 import com.alibaba.fastjson.JSON;
 import com.hzp.test.exception.SystemErrors;
-import com.hzp.test.util.JwtInfo;
+import com.hzp.test.dto.common.JwtInfo;
 import com.hzp.test.util.JwtTokenUtil;
-import com.hzp.test.util.ResponseEntity;
+import com.hzp.test.dto.common.ResponseEntity;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
