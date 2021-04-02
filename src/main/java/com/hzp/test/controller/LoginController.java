@@ -16,7 +16,6 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-
     @ApiOperation(value = "登录")
     @PostMapping(value = "")
     public ResponseEntity save(@RequestBody LoginReq loginReq) {
