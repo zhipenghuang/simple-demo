@@ -18,9 +18,9 @@ public class IPUtil {
             System.out.println("Error: Invalid ip2region.db file");
         }
         //查询算法
-        int algorithm = DbSearcher.BTREE_ALGORITHM; //B-tree
-        //DbSearcher.BINARY_ALGORITHM //Binary
-        //DbSearcher.MEMORY_ALGORITYM //Memory
+//        int algorithm = DbSearcher.BTREE_ALGORITHM; //B-tree
+//        int algorithm = DbSearcher.BINARY_ALGORITHM; //Binary
+        int algorithm = DbSearcher.MEMORY_ALGORITYM; //Memory
         try {
             DbConfig config = new DbConfig();
             DbSearcher searcher = new DbSearcher(config, dbPath);
