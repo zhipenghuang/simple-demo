@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.lang.Validator;
+import cn.hutool.core.util.StrUtil;
 import com.google.common.base.Stopwatch;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -259,8 +260,9 @@ public class TestDemo {
 //        System.err.println(bais.read());
 //        System.err.println(bais.read());
 //        System.err.println(bais.read());
-        String retStr = "";
-
-        System.err.println(retStr.getBytes(StandardCharsets.UTF_8).length);
+        String retStr = null;
+        String sStr = "4";
+        int i = StrUtil.indexOfIgnoreCase(retStr, sStr);
+        System.err.println(i);
     }
 }

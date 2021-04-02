@@ -1,5 +1,6 @@
 package com.hzp.test.config;
 
+import cn.hutool.core.util.StrUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -28,27 +29,23 @@ public class CrossDomainConfig {
 
     class CrossDomainFilter extends OncePerRequestFilter {
 
-        private volatile boolean allowCrossDomain = true;
-
         @Override
         protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-            if (allowCrossDomain) {
-                // 重要：clientIp不能为*，否则session无法传递到服务器端.
-                response.addHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
-                response.addHeader("Access-Control-Allow-Credentials", "true");
+            //跨域处理
+            response.addHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+            response.addHeader("Access-Control-Allow-Credentials", "true");
 
-                if (request.getHeader("Access-Control-Request-Method") != null && "OPTIONS".equalsIgnoreCase(request.getMethod())) {
-                    response.addHeader("Access-Control-Allow-Methods", "GET, POST");
-                    response.addHeader("Access-Control-Allow-Headers", "X-Requested-With, Origin, Content-Type, Cookie,Authorization,tk");
-                }
-                if (request.getMethod().equalsIgnoreCase("post")
-                        && StringUtils.isNotBlank(request.getContentType())
-                        && request.getContentType().contains("application/json")) {
-                    ServletRequest reqWrapper = new CustomRequestWrapper(request);
-                    filterChain.doFilter(reqWrapper, response);
-                } else {
-                    filterChain.doFilter(request, response);
-                }
+            if (request.getHeader("Access-Control-Request-Method") != null && "OPTIONS".equalsIgnoreCase(request.getMethod())) {
+                response.addHeader("Access-Control-Allow-Methods", "GET, POST");
+                response.addHeader("Access-Control-Allow-Headers", "X-Requested-With, Origin, Content-Type, Cookie,Authorization,tk");
+            }
+            //封装可重复读body的request
+            String POST = "post";
+            String JSON = "application/json";
+            if (POST.equalsIgnoreCase(request.getMethod()) && StrUtil.indexOfIgnoreCase(request.getContentType(), JSON) > -1) {
+                filterChain.doFilter(new CustomRequestWrapper(request), response);
+            } else {
+                filterChain.doFilter(request, response);
             }
         }
     }
