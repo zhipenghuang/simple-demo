@@ -22,7 +22,7 @@ import java.util.List;
 
 @Configuration
 @Profile({"dev", "test"})
-public class Swagger2 {
+public class Swagger {
 
     @Bean
     public Docket createRestApi() {
