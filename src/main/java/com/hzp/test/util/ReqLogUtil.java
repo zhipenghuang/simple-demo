@@ -1,9 +1,10 @@
-package com.hzp.test.config;
+package com.hzp.test.util;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.hzp.test.config.CustomRequestWrapper;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
@@ -14,6 +15,10 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+/**
+ * @Description: 请求日志工具类
+ * @Date 2021/3/15 10:17
+ */
 public class ReqLogUtil {
 
     private static final String USER_AGENT = "user-agent";

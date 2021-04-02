@@ -13,7 +13,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @author yunmu
+ * @Description: 自定义HttpServletRequestWrapper, 实现request的inputstream可重复读取
+ * @Date 2021/3/15 10:17
  */
 public class CustomRequestWrapper extends HttpServletRequestWrapper {
 

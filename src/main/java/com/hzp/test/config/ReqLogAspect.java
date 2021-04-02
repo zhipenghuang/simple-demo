@@ -1,5 +1,6 @@
 package com.hzp.test.config;
 
+import com.hzp.test.util.ReqLogUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -13,6 +14,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * @Description: 请求日志打印切面
+ * @Date 2021/3/15 10:17
+ */
 @Aspect
 @Slf4j
 @Order(0)

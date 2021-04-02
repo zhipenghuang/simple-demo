@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * @Description: jwt工具类
+ * @Date 2021/3/15 10:17
+ */
 @Component
 public class JwtTokenUtil {
 

@@ -1,4 +1,4 @@
-package com.hzp.test.config;
+package com.hzp.test.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.Validate;

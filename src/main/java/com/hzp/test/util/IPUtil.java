@@ -8,6 +8,10 @@ import org.lionsoul.ip2region.DbConfig;
 import org.lionsoul.ip2region.DbSearcher;
 import org.lionsoul.ip2region.Util;
 
+/**
+ * @Description: ip2region工具类
+ * @Date 2021/3/15 10:17
+ */
 public class IPUtil {
 
     public static String getCityInfo(String ip) {

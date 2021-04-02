@@ -17,6 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * @Description: 跨域配置，以及封装可重复读body的request
+ * @Date 2021/3/15 10:17
+ */
 @Component
 @WebFilter(filterName = "crossDomainFilter", urlPatterns = "/*")
 @Order(0)

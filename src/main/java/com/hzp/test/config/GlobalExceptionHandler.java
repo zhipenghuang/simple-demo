@@ -2,6 +2,7 @@ package com.hzp.test.config;
 
 import com.hzp.test.exception.*;
 import com.hzp.test.dto.common.ResponseEntity;
+import com.hzp.test.util.ReqLogUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -14,8 +15,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author yunmu
- * @create 2020/9/19.
+ * @Description: 全局异常捕获
+ * @Date 2021/3/15 10:17
  */
 @ControllerAdvice
 @Slf4j
