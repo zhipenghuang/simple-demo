@@ -24,6 +24,7 @@ public class CrossDomainConfig {
         filterBean.setFilter(new CrossDomainFilter());
         filterBean.setName("CrossDomainFilter");
         filterBean.addUrlPatterns("/*");
+        filterBean.setOrder(1);
         return filterBean;
     }
 
