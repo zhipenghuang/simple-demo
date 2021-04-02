@@ -29,7 +29,7 @@ public class AuthIntercepter extends HandlerInterceptorAdapter {
         } catch (Exception e) {
             log.error("token校验失败", e);
             response.setHeader("Content-type", "application/json;charset=UTF-8");
-            ResponseEntity result = new ResponseEntity(SystemErrors.TOKEN_ERROR.getCode(), SystemErrors.TOKEN_ERROR.getMessage());
+            ResponseEntity result = new ResponseEntity(SystemErrors.TOKEN_ERROR);
             response.getWriter().print(JSON.toJSONString(result));
             return false;
         }
