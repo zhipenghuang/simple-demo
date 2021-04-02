@@ -2,13 +2,11 @@ package com.hzp.test.config;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.json.JSONUtil;
-import com.hzp.test.config.ReqReReadWrapper;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -17,34 +15,6 @@ import java.util.List;
 public class ReqLogHandler {
 
     private static final String USER_AGENT = "user-agent";
-
-    //获取post请求的Body数据
-    public static String getBodyString(final ServletRequest request) {
-        InputStream inputStream = null;
-        BufferedReader reader = null;
-        try {
-            ServletInputStream originInputStream = request.getInputStream();
-            if (originInputStream == null) {
-                return "";
-            }
-            inputStream = cloneInputStream(originInputStream);
-            reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-            return IoUtil.read(reader);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            IoUtil.close(inputStream);
-            IoUtil.close(reader);
-        }
-        return "";
-    }
-
-    //复制输入流
-    public static InputStream cloneInputStream(ServletInputStream inputStream) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        IoUtil.copy(inputStream, byteArrayOutputStream, 1024);
-        return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
-    }
 
     //从request中获取header
     public static String getHeaderFromRequest(final HttpServletRequest request) {
@@ -62,10 +32,13 @@ public class ReqLogHandler {
     //从request中获取请求参数
     public static String getParamFromRequest(final HttpServletRequest request) {
         String requestParam = "";
-        if (request instanceof ReqReReadWrapper) {
+        if (request instanceof CustomRequestWrapper) {
             //post从body获取
-            ReqReReadWrapper requestWrapper = (ReqReReadWrapper) request;
-            requestParam = ReqLogHandler.getBodyString(requestWrapper);
+            try {
+                requestParam = IoUtil.read(request.getReader());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
             //get直接获取
             requestParam = JSONUtil.parse(request.getParameterMap() == null ? JSONUtil.createObj() : request.getParameterMap()).toJSONString(0);

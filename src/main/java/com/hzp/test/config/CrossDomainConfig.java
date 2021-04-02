@@ -44,7 +44,7 @@ public class CrossDomainConfig {
                 if (request.getMethod().equalsIgnoreCase("post")
                         && StringUtils.isNotBlank(request.getContentType())
                         && request.getContentType().contains("application/json")) {
-                    ServletRequest reqWrapper = new ReqReReadWrapper(request);
+                    ServletRequest reqWrapper = new CustomRequestWrapper(request);
                     filterChain.doFilter(reqWrapper, response);
                 } else {
                     filterChain.doFilter(request, response);

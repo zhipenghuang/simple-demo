@@ -3,6 +3,7 @@ package com.hzp.test.test;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.lang.Validator;
 import com.google.common.base.Stopwatch;
 import com.google.common.cache.Cache;
@@ -24,6 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.*;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -244,12 +246,21 @@ public class TestDemo {
 
     @Test
     public void clearCache() {
-        Set keys = redisTemplate.keys("*");
-        Iterator iterator = keys.iterator();
-        while (iterator.hasNext()) {
-//            redisTemplate.delete(iterator.next());
-            System.err.println(iterator.next());
-        }
+//        Set keys = redisTemplate.keys("*");
+//        Iterator iterator = keys.iterator();
+//        while (iterator.hasNext()) {
+////            redisTemplate.delete(iterator.next());
+//            System.err.println(iterator.next());
+//        }
+//        byte[] body = new byte[]{1,56,35,89};
+//        ByteArrayInputStream bais = new ByteArrayInputStream(body);
+//        System.err.println(bais.read());
+//        System.err.println(bais.read());
+//        System.err.println(bais.read());
+//        System.err.println(bais.read());
+//        System.err.println(bais.read());
+        String retStr = "";
 
+        System.err.println(retStr.getBytes(StandardCharsets.UTF_8).length);
     }
 }

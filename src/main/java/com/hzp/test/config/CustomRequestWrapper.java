@@ -1,5 +1,6 @@
 package com.hzp.test.config;
 
+import cn.hutool.core.io.IoUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ReadListener;
@@ -10,18 +11,18 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author yunmu
  */
-public class ReqReReadWrapper extends HttpServletRequestWrapper {
+public class CustomRequestWrapper extends HttpServletRequestWrapper {
+
     private final byte[] body;
 
-    public ReqReReadWrapper(HttpServletRequest request)
-            throws IOException {
+    public CustomRequestWrapper(HttpServletRequest request) throws IOException {
         super(request);
-        body = readBytes(request.getReader(), "utf-8");
+        body = IoUtil.read(request.getReader()).getBytes(StandardCharsets.UTF_8);
     }
 
     @Override
@@ -31,9 +32,6 @@ public class ReqReReadWrapper extends HttpServletRequestWrapper {
 
     @Override
     public ServletInputStream getInputStream() {
-        if (body == null) {
-            return null;
-        }
         final ByteArrayInputStream bais = new ByteArrayInputStream(body);
         return new ServletInputStream() {
             @Override
@@ -55,17 +53,5 @@ public class ReqReReadWrapper extends HttpServletRequestWrapper {
                 return bais.read();
             }
         };
-    }
-
-    //通过BufferedReader和字符编码集转换成byte数组
-    private byte[] readBytes(BufferedReader br, String encoding) throws IOException {
-        String str = null, retStr = "";
-        while ((str = br.readLine()) != null) {
-            retStr += str;
-        }
-        if (StringUtils.isNotBlank(retStr)) {
-            return retStr.getBytes(Charset.forName(encoding));
-        }
-        return null;
     }
 }
