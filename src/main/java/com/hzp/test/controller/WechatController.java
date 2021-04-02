@@ -23,50 +23,43 @@ public class WechatController {
     @Autowired
     private WechatService wechatService;
 
-
-    @ResponseBody
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ApiOperation(value = "新增")
+    @PostMapping(value = "/save")
     public ResponseEntity save(@RequestBody SaveWechatReq saveWechatReq) {
         wechatService.save(saveWechatReq);
         return new ResponseEntity();
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ApiOperation(value = "更新")
+    @PostMapping(value = "/update")
     public ResponseEntity update(@RequestBody UpdateWechatReq updateWechatReq) {
         wechatService.update(updateWechatReq);
         return new ResponseEntity();
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ApiOperation(value = "删除")
+    @PostMapping(value = "/delete")
     public ResponseEntity delete(@RequestBody WechatIdReq wechatIdReq) {
         wechatService.delete(wechatIdReq);
         return new ResponseEntity();
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/findOne", method = RequestMethod.POST)
     @ApiOperation(value = "查询单条记录")
+    @PostMapping(value = "/findOne")
     public ResponseEntity<WechatGroup> findOne(@RequestBody WechatIdReq wechatIdReq) {
         return new ResponseEntity(wechatService.findOne(wechatIdReq));
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/page", method = RequestMethod.POST)
     @ApiOperation(value = "分页查询")
+    @RequestMapping(value = "/page")
     public ResponseEntity<PageResponse<WechatGroup>> page(@RequestBody PageWechatReq pageWechatReq, HttpServletRequest request) {
-        System.err.println("userId : "+ request.getAttribute("userId"));
-        System.err.println("username : "+ request.getAttribute("username"));
+        System.err.println("userId : " + request.getAttribute("userId"));
+        System.err.println("username : " + request.getAttribute("username"));
         return new ResponseEntity(wechatService.page(pageWechatReq));
     }
 
-    @ResponseBody
-    @RequestMapping(value = "/getWechat", method = RequestMethod.POST)
     @ApiOperation(value = "随机获取一个微信号")
+    @PostMapping(value = "/getWechat")
     public ResponseEntity<String> getWechat() {
         return new ResponseEntity(wechatService.getWechat());
     }

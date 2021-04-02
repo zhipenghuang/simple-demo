@@ -33,12 +33,12 @@ public class ReqLogAspect {
         //获取请求地址
         String requestPath = request.getRequestURL().toString();
         //获取请求头
-        String requestHeader = ReqLogHandler.getHeaderFromRequest(request);
+        String requestHeader = ReqLogUtil.getHeaderFromRequest(request);
         //获取请求参数
-        String requestParam = ReqLogHandler.getParamFromRequest(request);
+        String requestParam = ReqLogUtil.getParamFromRequest(request);
         //执行完方法的返回值：调用proceed()方法，就会触发切入点方法执行,result的值就是被拦截方法的返回值
         Object result = pjp.proceed();
-        String reqLog = ReqLogHandler.buildLogInfo(requestPath, requestHeader, requestParam, result, startTimestamp, System.currentTimeMillis());
+        String reqLog = ReqLogUtil.buildLogInfo(requestPath, requestHeader, requestParam, result, startTimestamp, System.currentTimeMillis());
         log.info(reqLog);
         return result;
     }

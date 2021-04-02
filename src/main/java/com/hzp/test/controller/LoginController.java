@@ -17,9 +17,8 @@ public class LoginController {
     private LoginService loginService;
 
 
-    @ResponseBody
-    @RequestMapping(value = "", method = RequestMethod.POST)
     @ApiOperation(value = "登录")
+    @PostMapping(value = "")
     public ResponseEntity save(@RequestBody LoginReq loginReq) {
         loginService.login(loginReq);
         return new ResponseEntity();

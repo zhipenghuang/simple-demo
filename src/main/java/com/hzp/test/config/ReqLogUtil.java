@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-public class ReqLogHandler {
+public class ReqLogUtil {
 
     private static final String USER_AGENT = "user-agent";
 
