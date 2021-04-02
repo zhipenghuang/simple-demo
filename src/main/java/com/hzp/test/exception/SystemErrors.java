@@ -8,22 +8,18 @@ public enum SystemErrors implements Errors {
 
     SUCCESS(0, "success"),
     FAIL(-1, "failure"),
-
     SYSTEM_ERROR(500, "内部服务错误"),
+    REQUEST_BASE_EXCEPTION(1001, "请求异常"),
 
-    SERVLET_EXCEPTION(402, "请求处理出现异常"),
-
-    METHOD_ARGUMENT_TYPE_MISMATCH_EXCEPTION(4004, "参数绑定异常！"),
-    REQUEST_PARAM_ERROR(4005, "请求参数格式或绑定错误"),
     //自定义
-    ID_NOT_NULL(1001, "id不能为空"),
-    PASSWORD_ERROR(1002, "密码错误"),
-    GROUP_WECHAT_NOT_NULL(1003, "组名和微信号都不能为空"),
-    GROUP_EXISTS(1004, "组名已存在"),
-    NO_DOMAIN(1005, "域名没有配置"),
-    PASSWORD_NOT_EXISTS(1006, "密码未设置"),
-    CN_CHAR_EXISTS(1007, "不能使用中文逗号"),
-    TOKEN_ERROR(1522, "token不合法");
+    ID_NOT_NULL(2001, "id不能为空"),
+    PASSWORD_ERROR(2002, "密码错误"),
+    GROUP_WECHAT_NOT_NULL(2003, "组名和微信号都不能为空"),
+    GROUP_EXISTS(2004, "组名已存在"),
+    NO_DOMAIN(2005, "域名没有配置"),
+    PASSWORD_NOT_EXISTS(2006, "密码未设置"),
+    CN_CHAR_EXISTS(2007, "不能使用中文逗号"),
+    TOKEN_ERROR(2008, "token不合法");
 
 
     public int code;
