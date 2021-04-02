@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Aspect
 @Slf4j
-@Order(value = 1)
+@Order(0)
 @Component
 public class ReqLogAspect {
 
