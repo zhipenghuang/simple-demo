@@ -1,4 +1,4 @@
-package com.hzp.test.config;
+package com.hzp.test.util;
 
 import cn.hutool.core.io.IoUtil;
 
