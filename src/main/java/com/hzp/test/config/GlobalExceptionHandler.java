@@ -1,6 +1,5 @@
 package com.hzp.test.config;
 
-import cn.hutool.core.util.StrUtil;
 import com.hzp.test.exception.*;
 import com.hzp.test.util.ResponseEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -119,9 +118,6 @@ public class GlobalExceptionHandler {
         String requestHeader = ReqLogHandler.getHeaderFromRequest(request);
         //获取请求参数
         String requestParam = ReqLogHandler.getParamFromRequest(request);
-        String str = "\n请求地址：" + requestPath +
-                "\n请求头　：" + requestHeader +
-                "\n请求参数：" + StrUtil.cleanBlank(requestParam);
-        return str;
+        return ReqLogHandler.buildLogInfo(requestPath, requestHeader, requestParam);
     }
 }

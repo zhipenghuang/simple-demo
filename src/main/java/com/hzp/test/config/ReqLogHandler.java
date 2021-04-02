@@ -1,6 +1,8 @@
 package com.hzp.test.config;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 
 import javax.servlet.ServletInputStream;
@@ -44,5 +46,20 @@ public class ReqLogHandler {
             requestParam = JSONUtil.parse(request.getParameterMap() == null ? JSONUtil.createObj() : request.getParameterMap()).toJSONString(0);
         }
         return requestParam;
+    }
+
+    public static String buildLogInfo(String requestPath, String requestHeader, String requestParam, Object responseObj, long start, long end) {
+        return "\n请求地址：" + requestPath +
+                "\n请求头　：" + requestHeader +
+                "\n请求时间：" + DateUtil.date(start).toString("yyyy-MM-dd HH:mm:ss.sss") +
+                "\n花费时间：" + (end - start) + "ms" +
+                "\n请求参数：" + StrUtil.cleanBlank(requestParam) +
+                "\n请求结果：" + JSONUtil.parse(responseObj == null ? JSONUtil.createObj() : responseObj).toJSONString(0);
+    }
+
+    public static String buildLogInfo(String requestPath, String requestHeader, String requestParam) {
+        return "\n请求地址：" + requestPath +
+                "\n请求头　：" + requestHeader +
+                "\n请求参数：" + StrUtil.cleanBlank(requestParam);
     }
 }
