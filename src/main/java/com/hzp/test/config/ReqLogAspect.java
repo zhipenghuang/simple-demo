@@ -30,14 +30,15 @@ public class ReqLogAspect {
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;
         HttpServletRequest request = sra.getRequest();
+        //执行完方法的返回值：调用proceed()方法，就会触发切入点方法执行,result的值就是被拦截方法的返回值
+        Object result = pjp.proceed();
         //获取请求地址
         String requestPath = request.getRequestURL().toString();
         //获取请求头
         String requestHeader = ReqLogUtil.getHeaderFromRequest(request);
         //获取请求参数
         String requestParam = ReqLogUtil.getParamFromRequest(request);
-        //执行完方法的返回值：调用proceed()方法，就会触发切入点方法执行,result的值就是被拦截方法的返回值
-        Object result = pjp.proceed();
+        //打印请求日志
         String reqLog = ReqLogUtil.buildLogInfo(requestPath, requestHeader, requestParam, result, startTimestamp, System.currentTimeMillis());
         log.info(reqLog);
         return result;

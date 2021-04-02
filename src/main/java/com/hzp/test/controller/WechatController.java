@@ -51,7 +51,7 @@ public class WechatController {
     }
 
     @ApiOperation(value = "分页查询")
-    @RequestMapping(value = "/page")
+    @PostMapping(value = "/page")
     public ResponseEntity<PageResponse<WechatGroup>> page(@RequestBody PageWechatReq pageWechatReq, HttpServletRequest request) {
         System.err.println("userId : " + request.getAttribute("userId"));
         System.err.println("username : " + request.getAttribute("username"));
