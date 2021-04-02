@@ -227,19 +227,6 @@ public class TestDemo {
         redisTemplate.opsForValue().set("ceshi", map);
     }
 
-    @Test
-    public void httpUtil() {
-        try {
-            Stopwatch stopwatch = Stopwatch.createStarted();
-            Map<String, String> s = HttpUtils.ipParse("104.193.88.123");
-            stopwatch.stop();
-            System.err.println(stopwatch.elapsed(TimeUnit.MILLISECONDS));
-            System.err.println(s);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     //时间5分钟偏移量,2021-03-30 10:00:00代表2021-03-30 09:55:00到2021-03-30 09:59:59
     @Test
     public void strUtil() {
