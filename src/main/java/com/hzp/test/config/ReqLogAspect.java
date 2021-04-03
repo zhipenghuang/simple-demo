@@ -1,5 +1,6 @@
 package com.hzp.test.config;
 
+import com.google.common.base.Stopwatch;
 import com.hzp.test.util.ReqLogUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -30,8 +31,8 @@ public class ReqLogAspect {
     //环绕触发
     @Around("logPointCut()")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
-        //开始时间
-        long startTimestamp = System.currentTimeMillis();
+        //计时器开启
+        Stopwatch started = Stopwatch.createStarted();
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;
         HttpServletRequest request = sra.getRequest();
@@ -43,8 +44,10 @@ public class ReqLogAspect {
         String requestHeader = ReqLogUtil.getHeaderFromRequest(request);
         //获取请求参数
         String requestParam = ReqLogUtil.getParamFromRequest(request);
+        //计时器关闭
+        started.stop();
         //打印请求日志
-        String reqLog = ReqLogUtil.buildLogInfo(requestPath, requestHeader, requestParam, result, startTimestamp, System.currentTimeMillis());
+        String reqLog = ReqLogUtil.buildLogInfo(requestPath, requestHeader, requestParam, result, started);
         log.info(reqLog);
         return result;
     }
