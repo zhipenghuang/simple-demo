@@ -1,13 +1,12 @@
 package com.hzp.test.util;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.google.common.base.Stopwatch;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
