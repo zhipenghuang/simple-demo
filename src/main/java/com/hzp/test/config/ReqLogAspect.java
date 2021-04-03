@@ -14,6 +14,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 /**
  * @Description: 请求日志打印切面
@@ -33,22 +34,13 @@ public class ReqLogAspect {
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
         //计时器开启
         Stopwatch started = Stopwatch.createStarted();
-        RequestAttributes ra = RequestContextHolder.getRequestAttributes();
+        RequestAttributes ra = Objects.requireNonNull(RequestContextHolder.getRequestAttributes());
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;
         HttpServletRequest request = sra.getRequest();
         //执行完方法的返回值：调用proceed()方法，就会触发切入点方法执行,result的值就是被拦截方法的返回值
         Object result = pjp.proceed();
-        //获取请求地址
-        String requestPath = request.getRequestURL().toString();
-        //获取请求头
-        String requestHeader = ReqLogUtil.getHeaderFromRequest(request);
-        //获取请求参数
-        String requestParam = ReqLogUtil.getParamFromRequest(request);
-        //计时器关闭
-        started.stop();
         //打印请求日志
-        String reqLog = ReqLogUtil.buildLogInfo(requestPath, requestHeader, requestParam, result, started);
-        log.info(reqLog);
+        log.info(ReqLogUtil.buildReqLogOfNormal(request, result, started));
         return result;
     }
 

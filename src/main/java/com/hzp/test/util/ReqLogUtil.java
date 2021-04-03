@@ -19,9 +19,42 @@ import java.util.concurrent.TimeUnit;
 public class ReqLogUtil {
 
     private static final String USER_AGENT = "user-agent";
+    private static final String PATH = "\npath   ：";
+    private static final String HEADER = "\nheader ：";
+    private static final String ELAPSED = "\nelapsed：";
+    private static final String PARAM = "\nparam  ：";
+    private static final String RESULT = "\nresult ：";
+
+    //请求正常返回时的日志打印
+    public static String buildReqLogOfNormal(final HttpServletRequest request, final Object result, final Stopwatch stopwatch) {
+        //获取请求地址
+        String requestPath = request.getRequestURL().toString();
+        //获取请求头
+        String requestHeader = getHeaderFromRequest(request);
+        //获取请求参数
+        String requestParam = getParamFromRequest(request);
+        //计时器关闭
+        stopwatch.stop();
+        //返回请求日志
+        String reqLog = PATH + requestPath + HEADER + requestHeader + ELAPSED + stopwatch.elapsed(TimeUnit.MILLISECONDS) + "ms" +
+                PARAM + StrUtil.cleanBlank(requestParam) +
+                RESULT + JSONUtil.parse(result == null ? JSONUtil.createObj() : result).toJSONString(0);
+        return reqLog;
+    }
+
+    //请求出现异常时的日志打印
+    public static String buildReqLogOfException(final HttpServletRequest request) {
+        //获取请求地址
+        String requestPath = request.getRequestURL().toString();
+        //获取请求头
+        String requestHeader = getHeaderFromRequest(request);
+        //获取请求参数
+        String requestParam = getParamFromRequest(request);
+        return PATH + requestPath + HEADER + requestHeader + PARAM + StrUtil.cleanBlank(requestParam);
+    }
 
     //从request中获取header
-    public static String getHeaderFromRequest(final HttpServletRequest request) {
+    private static String getHeaderFromRequest(final HttpServletRequest request) {
         Enumeration<String> headers = request.getHeaderNames();
         List<String> headersList = new ArrayList<>();
         while (headers.hasMoreElements()) {
@@ -34,7 +67,7 @@ public class ReqLogUtil {
     }
 
     //从request中获取请求参数
-    public static String getParamFromRequest(final HttpServletRequest request) {
+    private static String getParamFromRequest(final HttpServletRequest request) {
         String requestParam = "";
         if (request instanceof CustomRequestWrapper) {
             //post从body获取
@@ -48,19 +81,5 @@ public class ReqLogUtil {
             requestParam = JSONUtil.parse(request.getParameterMap() == null ? JSONUtil.createObj() : request.getParameterMap()).toJSONString(0);
         }
         return requestParam;
-    }
-
-    public static String buildLogInfo(String requestPath, String requestHeader, String requestParam, Object responseObj, Stopwatch stopwatch) {
-        return "\npath   ：" + requestPath +
-                "\nheader ：" + requestHeader +
-                "\nelapsed：" + stopwatch.elapsed(TimeUnit.MILLISECONDS) + "ms" +
-                "\nparam  ：" + StrUtil.cleanBlank(requestParam) +
-                "\nresult ：" + JSONUtil.parse(responseObj == null ? JSONUtil.createObj() : responseObj).toJSONString(0);
-    }
-
-    public static String buildLogInfo(String requestPath, String requestHeader, String requestParam) {
-        return "\npath   ：" + requestPath +
-                "\nheader ：" + requestHeader +
-                "\nparam  ：" + StrUtil.cleanBlank(requestParam);
     }
 }
