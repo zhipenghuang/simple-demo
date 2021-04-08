@@ -4,7 +4,16 @@ import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Validator;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
+import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONUtil;
+import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.html.DomText;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.common.base.Stopwatch;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -16,7 +25,10 @@ import com.hzp.test.dto.common.JwtInfo;
 import com.hzp.test.mapper.WechatGroupMapper;
 import com.hzp.test.service.TestService;
 import com.hzp.test.service.WechatService;
-import com.hzp.test.util.*;
+import com.hzp.test.util.IPUtil;
+import com.hzp.test.util.HtmlUnitUtil;
+import com.hzp.test.util.JwtTokenUtil;
+import com.hzp.test.util.ShareCodeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
@@ -267,10 +279,61 @@ public class TestDemo {
 
     @Test
     public void ipTest() {
-        String ip = "183.178.28.130";
-        Stopwatch stopwatch = Stopwatch.createStarted();
-        System.out.println(ipUtil.getCityInfo(ip));
-        stopwatch.stop();
-        System.err.println(stopwatch.elapsed(TimeUnit.MICROSECONDS));
+//        String ip = "13.75.108.60";
+//        Stopwatch stopwatch = Stopwatch.createStarted();
+//        System.out.println(ipUtil.getCityInfo(ip));
+//        stopwatch.stop();
+        System.err.println(IdUtil.randomUUID());
+    }
+
+    @Test
+    public void domainTest() throws InterruptedException {
+
+    }
+
+    @Test
+    public void crawler() {
+        String url = "flcp88777.com";
+        //获取指定网页实体
+        HtmlPage page = HtmlUnitUtil.getHtmlPage("https://www.ce8.com/http/" + url);
+        //获取所有script
+        List<DomText> byXPath = (List<DomText>) page.getByXPath("//script/text()");
+        //获取包含token的script
+        String script = byXPath.get(2).asText();
+        //解析script字符串
+        int var_token = script.indexOf("var token");
+        String s1 = script.substring(var_token);
+        int i = s1.indexOf("\"");
+        //最终获取token
+        String token = s1.substring(i + 1, s1.indexOf("\"", i + 1));
+        System.err.println(token);
+        HttpRequest post = HttpUtil.createPost("https://check1.ce8.com/api/check/site_all");
+        post.contentType("application/json");
+        Map<String, String> paramMap = new HashMap<>();
+        paramMap.put("token", token);
+        paramMap.put("url", url);
+        String paramStr = JSONUtil.parse(paramMap).toJSONString(0);
+        post.body(paramStr);
+        HttpResponse execute = post.execute();
+        System.err.println(execute.body());
+    }
+
+    @Test
+    public void crawlerBaidu() throws IOException {
+        // 获取指定网页实体
+        HtmlPage page = HtmlUnitUtil.getHtmlPage("https://www.baidu.com/");
+        System.out.println(page.asText());  //asText()是以文本格式显示
+        System.out.println(page.asXml());   //asXml()是以xml格式显示
+        // 获取搜索输入框
+        HtmlInput input = page.getHtmlElementById("kw");
+        // 往输入框 “填值”
+        input.setValueAttribute("绿林寻猫");
+        // 获取搜索按钮
+        HtmlInput btn = page.getHtmlElementById("su");
+        // “点击” 搜索
+        HtmlPage resultPage = btn.click();
+        // 选择元素
+        Page enclosedPage = resultPage.getEnclosingWindow().getTopWindow().getEnclosedPage();
+        System.err.println(enclosedPage.getWebResponse().getContentAsString());
     }
 }
