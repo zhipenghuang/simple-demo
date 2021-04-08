@@ -36,7 +36,7 @@ public class CrossDomainFilter extends OncePerRequestFilter {
         //封装可重复读body的request
         String POST = "post";
         String JSON = "application/json";
-        if (POST.equalsIgnoreCase(request.getMethod()) && StrUtil.indexOfIgnoreCase(request.getContentType(), JSON) > -1) {
+        if (POST.equalsIgnoreCase(request.getMethod()) && StrUtil.containsIgnoreCase(request.getContentType(), JSON)) {
             filterChain.doFilter(new CustomRequestWrapper(request), response);
         } else {
             filterChain.doFilter(request, response);
