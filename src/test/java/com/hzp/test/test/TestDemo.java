@@ -300,12 +300,8 @@ public class TestDemo {
         List<DomText> byXPath = (List<DomText>) page.getByXPath("//script/text()");
         //获取包含token的script
         String script = byXPath.get(2).asText();
-        //解析script字符串
-        int var_token = script.indexOf("var token");
-        String s1 = script.substring(var_token);
-        int i = s1.indexOf("\"");
         //最终获取token
-        String token = s1.substring(i + 1, s1.indexOf("\"", i + 1));
+        String token = StrUtil.subBetween(StrUtil.subAfter(script, "var token", false), "\"");
         System.err.println(token);
         HttpRequest post = HttpUtil.createPost("https://check1.ce8.com/api/check/site_all");
         post.contentType("application/json");
