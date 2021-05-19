@@ -17,7 +17,7 @@ import java.net.MalformedURLException;
 public class HtmlUnitUtil {
 
     private static class innerWebClient {
-        private static final WebClient webClient = new WebClient(BrowserVersion.FIREFOX_3);
+        private static final WebClient webClient = new WebClient(BrowserVersion.INTERNET_EXPLORER_7);
     }
 
     /**
@@ -29,13 +29,13 @@ public class HtmlUnitUtil {
         //调用此方法时加载WebClient
         WebClient webClient = innerWebClient.webClient;
 
-        webClient.setCssEnabled(false);
         webClient.setJavaScriptEnabled(false); //启用JS解释器，默认为true
         webClient.setJavaScriptTimeout(10000);//设置JS执行的超时时间
         webClient.setCssEnabled(false); //禁用css支持
         webClient.setThrowExceptionOnScriptError(false); //js运行错误时，是否抛出异常
         webClient.setTimeout(10000); //设置连接超时时间 ，这里是10S。如果为0，则无限期等待
         webClient.setAjaxController(new NicelyResynchronizingAjaxController());//设置支持AJAX
+        webClient.waitForBackgroundJavaScript(30000);
         HtmlPage page = null;
         try {
             // 获取指定网页实体

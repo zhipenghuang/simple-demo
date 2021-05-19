@@ -3,17 +3,17 @@ package com.hzp.test.test;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.gargoylesoftware.htmlunit.Page;
-import com.gargoylesoftware.htmlunit.html.DomText;
-import com.gargoylesoftware.htmlunit.html.HtmlInput;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.*;
 import com.google.common.base.Stopwatch;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -34,15 +34,24 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.*;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -248,8 +257,8 @@ public class TestDemo {
         int minute = now.getField(DateField.MINUTE);
         DateTime hourOfNow = DateUtil.beginOfHour(now);
         DateTime fiveMinuteKey = hourOfNow.offsetNew(DateField.MINUTE, minute - minute % 5 + 5);
-        System.err.println(fiveMinuteKey);
-        redisTemplate.opsForValue().set(fiveMinuteKey, "sb");
+        System.err.println(fiveMinuteKey.toString());
+//        redisTemplate.opsForValue().set(fiveMinuteKey, "sb");
 
 //        String template = "{}爱{}，就像老鼠爱大米";
 //        String str = StrUtil.format(template, "我", "你"); //str -> 我爱你，就像老鼠爱大米
@@ -331,5 +340,71 @@ public class TestDemo {
         // 选择元素
         Page enclosedPage = resultPage.getEnclosingWindow().getTopWindow().getEnclosedPage();
         System.err.println(enclosedPage.getWebResponse().getContentAsString());
+    }
+
+    @Test
+    public void md5File() throws IOException {
+        String url = "flc371.com";
+        //获取指定网页实体
+        HtmlPage page = HtmlUnitUtil.getHtmlPage("https://www.boce.com/http/" + url);
+//        List<HtmlInput> byXPath = (List<HtmlInput>) page.getByXPath("//input[@class=\"main02b2 banner_input_sub action_submit\"]");
+//        HtmlInput htmlInput = byXPath.get(0);
+//        HtmlPage click = htmlInput.click();
+
+//        HtmlPage page1 = HtmlUnitUtil.getHtmlPage("https://www.boce.com/http/" + url);
+        Page enclosedPage = page.getEnclosingWindow().getTopWindow().getEnclosedPage();
+        String content = enclosedPage.getWebResponse().getContentAsString();
+        System.err.println(content);
+//        String s = StrUtil.subBetween(content, "<tbody class=\"node-data-tbody\">", "</tbody>");
+//        List<String> collect = Arrays.stream(StrUtil.subBetweenAll(s, "<td>", "</td>")).filter(s1 -> StrUtil.contains(s1, "Kb/s")).collect(Collectors.toList());
+//        System.err.println(collect.toString());
+//        System.err.println(collect.size());
+    }
+
+    @Test
+    public void pjs() throws InterruptedException {
+        DesiredCapabilities dcaps = new DesiredCapabilities();
+
+        dcaps.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
+
+        dcaps.setCapability(CapabilityType.TAKES_SCREENSHOT, false);
+
+        dcaps.setCapability(CapabilityType.SUPPORTS_FINDING_BY_CSS, true);
+
+        dcaps.setJavascriptEnabled(true);
+//
+        dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, "D:\\google download\\phantomjs-2.1.1-windows\\phantomjs-2.1.1-windows\\bin\\phantomjs.exe");
+        PhantomJSDriver driver = new PhantomJSDriver(dcaps);
+
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        driver.manage().timeouts().setScriptTimeout(30, TimeUnit.SECONDS);
+        driver.get("https://www.boce.com/http/flc367.com");
+//        WebElement button = driver.findElementByXPath("//input[@class=\"main02b2 banner_input_sub action_submit\"]");
+//        System.err.println(button.getAttribute("value"));
+//        button.click();
+        WebElement tbody = driver.findElementByXPath("//tbody[@class=\"node-data-tbody\"]");
+        List<WebElement> paixu = tbody.findElements(By.tagName("tr"));
+//        for (WebElement element : paixu) {
+//            List<WebElement> td = element.findElements(By.tagName("td"));
+//            for (WebElement element1 : td) {
+//                System.err.println(element1.getAttribute("title"));
+//            }
+//        }
+        WebElement element = paixu.get(0);
+        WebElement td = element.findElement(By.tagName("td"));
+        while (StrUtil.isBlank(td.getText())) {
+            td = element.findElement(By.tagName("td"));
+        }
+        System.err.println(td.getText());
+//        File screenshotAs = driver.getScreenshotAs(OutputType.FILE);
+//        File file = new File("C:\\Users\\Administrator\\Desktop\\image");
+//        FileUtil.copyFilesFromDir(screenshotAs, file, true);
+//        String absolutePath = file1.getAbsolutePath();
+//        System.err.println(absolutePath);
+//        String text = elementByXPath.getText();
+//        System.err.println(text);
+//        WebElement body = driver.findElement(By.tagName("body"));
+//        String body_text = body.getText();
+//        System.out.println(body_text);
     }
 }
