@@ -1,0 +1,37 @@
+账号：yunmu
+密码：Password!@# 
+新密码：Hzp@172594
+
+虚拟机 root Hzp@172594
+
+jenkins yunmu Hzp@172594
+
+yunmuok@gmail.com Hzp@172594
+
+mysql root 123456
+
+开发环境mysql 192.168.2.65、192.168.2.64  root/Flopsmysql!@#
+
+--privileged=true --restart=always
+
+git rm -r --cached .idea
+git branch -d yunmu-new
+git push origin --delete <BranchName>
+git remote update origin --prune
+git clone -b <branchName> <path> 
+git remote set-url origin git@192.168.1.6:sz/sz-channel-managment.git
+git remote -v
+
+docker inspect mysql3307
+docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nsqd
+
+nohup /home/jdk1.8.0_161/bin/java -jar /home/workspace/yunmu-test/yunmu-test.jar >/home/workspace/yunmu-test/nohup.out  2>&1 &
+
+ps -eLf | grep 21929 | wc -l
+jstack -l 21929 > xx.log
+
+jmap -heap 21929
+
+netstat -an |grep 8080 | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
+
+亚博账号 yunmuok1 hzp172594
